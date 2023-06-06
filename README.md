@@ -2,10 +2,11 @@
 A very basic and simple example using node express and elastic search
 
 
-
+```console
 npm install
-// Pre-requisite: having ES running and having collected the certificate to connect using HTTPS
+# Pre-requisite: having ES running and having collected the certificate to connect using HTTPS
 npm start 
+```
 
 # Testing
 ## Installation of docker image Kibana & Elsastic search

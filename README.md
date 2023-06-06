@@ -1,4 +1,4 @@
-# nodejs-simple-example
+# simple-node-express-with-elastic-search 
 A very basic and simple example using nodejs, axios, jest 
 
 npm install

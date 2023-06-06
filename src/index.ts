@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 import ElasticSearch from './elastic/ElasticSearch';
 import Application from './app/Application';
-import Quotes from './elastic/Quotes';
+import Quotes, { QuoteInsert, QuoteSearch } from './elastic/Quotes';
 
 const app = express()
 const port = 3000;
@@ -16,12 +16,17 @@ Application.initialisation().then(async () => {
         if (!elasticIndex) {
             await ElasticSearch.createIndex(Quotes.quotesMapping.index);
             await ElasticSearch.setMapping(Quotes.quotesMapping);
-            // await data.populateDatabase()
         }
     }
 
-    app.get('/', (req: Request, res: Response) => {
-        res.send('Hello World!');
+    app.get('/search', async (request: Request<any, any, any , QuoteSearch>, response: Response) => {
+        let body = await Quotes.getQuotes(request.query);
+        response.send(`result of the search: ${JSON.stringify(body)}`);
+    })
+
+    app.all('/quote/add', async (request: Request<any, any, any , QuoteInsert>, response: Response) => {
+        let body = await Quotes.insertNewQuote(request.query);
+        response.send(`result of the insert: ${JSON.stringify(body)}`);
     })
 
     app.listen(port, () => {

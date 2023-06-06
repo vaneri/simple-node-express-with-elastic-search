@@ -1,7 +1,27 @@
 import Application from "../app/Application";
 import ElasticSearch, { Mapping } from "./ElasticSearch";
 
+export interface QuoteSearch {
+    text?: string,
+    page?: number,
+    limit?: number
+}
+
+export interface QuoteInsert {
+    quote: string,
+    author: string
+}
 class Quotes {
+
+    private static searchQuote = (request: QuoteSearch) => {
+        return {
+            query: {
+                match: {
+                    quote: request.text
+                }
+            }
+        }
+    }
 
     public static quotesMapping: Mapping = {
         index: "quotes",
@@ -15,29 +35,24 @@ class Quotes {
         }
     };
 
-    public static async getQuotes(req) {
-        const query: any = {
-            query: {
-                quote: {
-                    match: {
-                        query: req.text,
-                        operator: "and",
-                        fuzziness: "auto"
-                    }
-                }
-            }
-        }
-
-        const body = await Application.getESClient().search({
+    public static async insertNewQuote(quoteInsert: QuoteInsert) {
+        const query = {
             index: this.quotesMapping.index,
-            from: req.page || 0,
-            size: req.limit || 100,
-            query: query.query
-        });
+            body: {
+                ...quoteInsert
+            }
+        };
+        console.log(query);
+        return await Application.getESClient().index(query)
+    }
 
-        return {
-            body
-        }
+    public static async getQuotes(request: QuoteSearch) {
+        return await Application.getESClient().search({
+            index: this.quotesMapping.index,
+            from: request.page || 0,
+            size: request.limit || 100,
+            query: this.searchQuote(request).query
+        });
     }
 }
 export default Quotes;

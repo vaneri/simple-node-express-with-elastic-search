@@ -21,14 +21,12 @@ class ElasticSearch {
 
     public static async setMapping(mapping: Mapping) {
         try {
-
             await Application.getESClient().indices.putMapping({
                 index: mapping.index,
                 body: {
                     properties: mapping.schema
                 }
             });
-
             console.log("Mapping created successfully");
         } catch (err) {
             console.error("An error occurred while setting the quotes mapping:");

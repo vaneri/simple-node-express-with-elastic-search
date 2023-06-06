@@ -2,7 +2,7 @@
 A very basic and simple example using nodejs, axios, jest 
 
 npm install
-//
+// Pre-requisite: having ES running and having collected the certificate to connect using HTTPS
 npm start 
 
 # Testing
@@ -20,7 +20,7 @@ Elasticsearch requires a sufficient number of virtual memory areas (vm.max_map_c
 > sudo sysctl -w vm.max_map_count=262144
 
 >docker run -d -v /path/on/host:/usr/share/elasticsearch/data elasticsearch:elasticsearch:8.8.0
-docker run -d --name es01 --net esnet -p 9200:9200 -it docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+>docker run -d --name es01 --net esnet -p 9200:9200 -it docker.elastic.co/elasticsearch/elasticsearch:8.8.0
 
 Getting the certificate
 >docker cp es01:/usr/share/elasticsearch/config/certs/http_ca.crt .
@@ -36,8 +36,12 @@ Get an enrolment token for kibana
 
 - go to localhost:5601
 - past the enrolment token
-- docker exec kibana bin/kibana-verification-code
+>docker exec kibana bin/kibana-verification-code
 - use the code
+
+if problem of connection use the following command and fallback with a 
+> docker network inspect esnet
+
 
 ## starting the docker-compose
 

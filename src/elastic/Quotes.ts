@@ -36,14 +36,12 @@ class Quotes {
     };
 
     public static async insertNewQuote(quoteInsert: QuoteInsert) {
-        const query = {
+        return await Application.getESClient().index({
             index: this.quotesMapping.index,
             body: {
                 ...quoteInsert
             }
-        };
-        console.log(query);
-        return await Application.getESClient().index(query)
+        });
     }
 
     public static async getQuotes(request: QuoteSearch) {

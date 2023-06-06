@@ -44,7 +44,7 @@ if problem of connection use the following command and fallback with a
 
 
 ## starting the docker-compose
-
+Work in progress / NOT tested
 >docker-compose up --build
 
 Those command should only be used in Development mode

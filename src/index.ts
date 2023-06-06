@@ -8,8 +8,8 @@ const port = 3000;
 
 
 Application.initialisation().then(async () => {
-    console.log('lets see if this is working... heuuuu');
     const isElasticReady = await ElasticSearch.checkConnection();
+    console.log('Application initiatize, lets go!');
     if (isElasticReady) {
         const elasticIndex = await Application.getESClient().indices.exists({ index: Quotes.quotesMapping.index });
 

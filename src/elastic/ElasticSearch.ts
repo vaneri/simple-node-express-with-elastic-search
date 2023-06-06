@@ -1,5 +1,6 @@
 import Application from "../app/Application";
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 export interface Mapping {
     index: string,
@@ -45,7 +46,8 @@ class ElasticSearch {
                     console.log("Successfully connected to ElasticSearch");
                     isConnected = true;
                 } catch (err) {
-                    console.log("Cluster state is not healthy" + err);
+                    console.log(`Connection to ES didn't work as expected: ${err}`);
+                    await delay(1000);
                 }
             }
             resolve(true);

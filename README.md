@@ -2,35 +2,48 @@
 A very basic and simple example using nodejs, axios, jest 
 
 npm install
+//
 npm start 
 
-# Docker
+# Testing
 ## Installation of docker image Kibana & Elsastic search
 
 docker pull kibana:8.7.1
 docker pull docker.elastic.co/elasticsearch/elasticsearch:8.8.0
 docker network create esnet
 
-## Starting docker & docker-compose 
 
-docker-compose up --build
-
+## Testing with ES running in docker
 
 Elasticsearch utilizes memory-mapped files to improve performance and enable efficient access to data.
-Elasticsearch requires a sufficient number of virtual memory areas (vm.max_map_count) 
--> sudo sysctl -w vm.max_map_count=262144
+Elasticsearch requires a sufficient number of virtual memory areas (vm.max_map_count)
+> sudo sysctl -w vm.max_map_count=262144
 
-docker run -d --name kibana --net esnet -p 5601:5601 kibana:8.7.1
--> go to localhost:5601
--> past the enrolment token
--> docker exec kibana bin/kibana-verification-code
--> use the code
+>docker run -d -v /path/on/host:/usr/share/elasticsearch/data elasticsearch:elasticsearch:8.8.0
+docker run -d --name es01 --net esnet -p 9200:9200 -it docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+
+Getting the certificate
+>docker cp es01:/usr/share/elasticsearch/config/certs/http_ca.crt .
+
+
+
+## Starting kibana
+
+Get an enrolment token for kibana
+>docker exec -it es01 /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s node
+
+>docker run -d --name kibana --net esnet -p 5601:5601 kibana:8.7.1
+
+- go to localhost:5601
+- past the enrolment token
+- docker exec kibana bin/kibana-verification-code
+- use the code
+
+## starting the docker-compose
+
+>docker-compose up --build
 
 Those command should only be used in Development mode
 
 Interesting commands to change the path of the data for docker:
-docker run -d -v /path/on/host:/usr/share/elasticsearch/data elasticsearch:<version>
-
-
-docker run -d --name es01 --net esnet -p 9200:9200 -it docker.elastic.co/elasticsearch/elasticsearch:8.8.0
--> copy the enrolment token
+https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html

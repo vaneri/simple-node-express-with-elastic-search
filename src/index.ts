@@ -6,7 +6,8 @@ import Quotes from './elastic/Quotes';
 const app = express()
 const port = 3000;
 
-(async function main() {
+
+Application.initialisation().then(async () => {
     console.log('lets see if this is working... heuuuu');
     const isElasticReady = await ElasticSearch.checkConnection();
     if (isElasticReady) {
@@ -27,4 +28,4 @@ const port = 3000;
         console.log(`Example app listening on port ${port}`)
     });
 
-})();
+});

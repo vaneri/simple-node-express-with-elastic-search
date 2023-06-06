@@ -1,6 +1,6 @@
-import { Client } from "@elastic/elasticsearch";
+import { Client, HttpConnection } from "@elastic/elasticsearch";
 import dotenv from "dotenv";
-
+import fs from "fs";
 
 
 class Application {
@@ -8,11 +8,21 @@ class Application {
 
     static async initialisation() {
         dotenv.config();
-        const elasticUrl = process.env.ELASTIC_URL || "http://localhost:9200";
-        this.esclient = new Client({ node: elasticUrl });
+        const elasticUrl = process.env.ELASTIC_URL || "https://localhost:9200";
+        this.esclient = new Client({
+            node: elasticUrl,
+            Connection: HttpConnection,
+            auth: {
+                username: 'elastic',
+                password: '7ATAIIAd+YorF*gmehvP'
+            }, tls: {
+                ca: fs.readFileSync('./http_ca.crt'),
+                rejectUnauthorized: false
+              }
+        });
     }
 
-    public static getESClient():Client {
+    public static getESClient(): Client {
         return this.esclient;
     }
 

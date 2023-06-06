@@ -40,16 +40,13 @@ class ElasticSearch {
             console.log("Checking connection to ElasticSearch...");
             let isConnected = false;
             while (!isConnected) {
-                await setTimeout(async () => {
-                    try {
-                        console.log("Waiting for the cluster to be ready");
-                        await Application.getESClient().cluster.health({});
-                        console.log("Successfully connected to ElasticSearch");
-                        isConnected = true;
-                    } catch (_) {
-                        console.log("Cluster state is not healthy");
-                    }
-                }, 2000);
+                try {
+                    await Application.getESClient().cluster.health({});
+                    console.log("Successfully connected to ElasticSearch");
+                    isConnected = true;
+                } catch (err) {
+                    console.log("Cluster state is not healthy" + err);
+                }
             }
             resolve(true);
         });

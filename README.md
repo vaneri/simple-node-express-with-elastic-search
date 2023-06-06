@@ -1,5 +1,7 @@
 # simple-node-express-with-elastic-search 
-A very basic and simple example using nodejs, axios, jest 
+A very basic and simple example using node express and elastic search
+
+
 
 npm install
 // Pre-requisite: having ES running and having collected the certificate to connect using HTTPS
